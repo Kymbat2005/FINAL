@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,4 +16,5 @@ public class StudentDto {
     private String nameDto;
     private String lastnameDto;
     private String emailDto;
+    private List<SubjectDto> subjects;
 }

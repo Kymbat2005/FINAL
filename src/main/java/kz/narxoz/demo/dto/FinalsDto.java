@@ -17,6 +17,6 @@ public class FinalsDto {
     private Long id;
     private String nameDto;
     private LocalDate dateDto;
-    private String subjectDto;
+    private Subject subjectDto;
 
 }
