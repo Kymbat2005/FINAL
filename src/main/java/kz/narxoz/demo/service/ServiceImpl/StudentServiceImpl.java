@@ -38,17 +38,18 @@ public class StudentServiceImpl  implements StudentService {
     }
 
     @Override
-    public StudentDto updateStudent(Long id,StudentDto studentDto){
-        Student student=studentRepository.findById(id).orElse(null);
-        Student studentEntity=studentMapper.toEntity(studentDto);
+    public StudentDto updateStudent(Long id, StudentDto studentDto){
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found with id " + id));
 
-        student.setId(studentEntity.getId());
-        student.setName(studentEntity.getName());
-        student.setLastname(studentEntity.getLastname());
-        student.setEmail(studentEntity.getEmail());
+        student.setName(studentDto.getNameDto());
+        student.setLastname(studentDto.getLastnameDto());
+        student.setEmail(studentDto.getEmailDto());
+
+
         return studentMapper.toDto(studentRepository.save(student));
-
     }
+
     @Override
     public Boolean deleteStudent(Long id){
         studentRepository.deleteById(id);

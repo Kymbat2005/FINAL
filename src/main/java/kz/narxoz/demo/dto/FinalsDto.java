@@ -12,11 +12,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class FinalsDto {
     private Long id;
-    private String nameDto;
-    private LocalDate dateDto;
-    private Subject subjectDto;
-
+    private String name;
+    private LocalDate date;
+    private Long studentId;
+    private Long subjectId;
 }
+

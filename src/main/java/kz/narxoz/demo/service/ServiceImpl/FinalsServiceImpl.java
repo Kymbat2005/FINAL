@@ -6,8 +6,10 @@ import kz.narxoz.demo.mapper.FinalsMapper;
 import kz.narxoz.demo.mapper.StudentMapper;
 import kz.narxoz.demo.model.Finals;
 import kz.narxoz.demo.model.Student;
+import kz.narxoz.demo.model.Subject;
 import kz.narxoz.demo.repository.FinalsRepository;
 import kz.narxoz.demo.repository.StudentRepository;
+import kz.narxoz.demo.repository.SubjectRepository;
 import kz.narxoz.demo.service.FinalsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,19 +38,28 @@ public class FinalsServiceImpl implements FinalsService {
         Finals finals=finalsRepository.save(finalsMapper.toEntity(finalsDto));
         return finalsMapper.toDto(finals);
     }
-
+    private final StudentRepository studentRepository;
+    private final SubjectRepository subjectRepository;
     @Override
-    public FinalsDto updateFinals(Long id,FinalsDto finalsDto){
-        Finals finals=finalsRepository.findById(id).orElse(null);
-        Finals finalsEntity=finalsMapper.toEntity(finalsDto);
+    public FinalsDto updateFinals(Long id, FinalsDto finalsDto){
+        Finals finals = finalsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Final not found with id " + id));
 
-        finals.setId(finalsEntity.getId());
-        finals.setName(finalsEntity.getName());
-        finals.setDate(finalsEntity.getDate());
-        finals.setStudent(finalsEntity.getStudent());
+        finals.setName(finalsDto.getName());
+        finals.setDate(finalsDto.getDate());
+
+
+        Student student = studentRepository.findById(finalsDto.getStudentId())
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        finals.setStudent(student);
+
+        Subject subject = subjectRepository.findById(finalsDto.getSubjectId())
+                .orElseThrow(() -> new RuntimeException("Subject not found"));
+        finals.setSubject(subject);
+
         return finalsMapper.toDto(finalsRepository.save(finals));
-
     }
+
     @Override
     public Boolean deleteFinals(Long id){
         finalsRepository.deleteById(id);

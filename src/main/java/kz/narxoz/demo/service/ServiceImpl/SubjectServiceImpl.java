@@ -34,16 +34,16 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public SubjectDto updateSubject(Long id,SubjectDto subjectDto){
-        Subject subject=subjectRepository.findById(id).orElse(null);
-        Subject subjectEntity=subjectMapper.toEntity(subjectDto);
+    public SubjectDto updateSubject(Long id, SubjectDto subjectDto){
+        Subject subject = subjectRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Subject not found with id " + id));
 
-        subject.setId(subjectEntity.getId());
-        subject.setName(subjectEntity.getName());
-        subject.setTeacher(subjectEntity.getTeacher());
+        subject.setName(subjectDto.getNameDto());
+        subject.setTeacher(subjectDto.getTeacherDto());
+
         return subjectMapper.toDto(subjectRepository.save(subject));
-
     }
+
     @Override
     public Boolean deleteSubject(Long id){
         subjectRepository.deleteById(id);
