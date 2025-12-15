@@ -45,8 +45,8 @@ public class FinalsServiceImpl implements FinalsService {
         Finals finals = finalsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Final not found with id " + id));
 
-        finals.setName(finalsDto.getName());
-        finals.setDate(finalsDto.getDate());
+        finals.setName(finalsDto.getNameDto());
+        finals.setDate(finalsDto.getDateDto());
 
 
         Student student = studentRepository.findById(finalsDto.getStudentId())

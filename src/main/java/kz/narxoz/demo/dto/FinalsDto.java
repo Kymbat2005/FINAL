@@ -14,8 +14,8 @@ import java.time.LocalDate;
 @Builder
 public class FinalsDto {
     private Long id;
-    private String name;
-    private LocalDate date;
+    private String nameDto;
+    private LocalDate dateDto;
     private Long studentId;
     private Long subjectId;
 }
