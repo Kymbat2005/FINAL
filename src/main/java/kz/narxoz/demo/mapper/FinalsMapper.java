@@ -12,8 +12,8 @@ public interface FinalsMapper {
     @Mapping(target = "nameDto", source = "name")
     @Mapping(target = "dateDto", source = "date")
 
-    @Mapping(target = "studentId", source = "student.id")
-    @Mapping(target = "subjectId", source = "subject.id")
+    @Mapping(target = "studentIdDto", source = "student.id")
+    @Mapping(target = "subjectIdDto", source = "subject.id")
     FinalsDto toDto(Finals finals);
 
     @Mapping(target = "name", source = "nameDto")

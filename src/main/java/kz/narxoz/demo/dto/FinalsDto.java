@@ -16,7 +16,7 @@ public class FinalsDto {
     private Long id;
     private String nameDto;
     private LocalDate dateDto;
-    private Long studentId;
-    private Long subjectId;
+    private Long studentIdDto;
+    private Long subjectIdDto;
 }
 

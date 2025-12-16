@@ -9,12 +9,15 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
+@ActiveProfiles("test")
+
 public class FinalsMapperTest {
 
     @Autowired
@@ -40,14 +43,14 @@ public class FinalsMapperTest {
         Assertions.assertNotNull(finalsDto.getId());
         Assertions.assertNotNull(finalsDto.getNameDto());
         Assertions.assertNotNull(finalsDto.getDateDto());
-        Assertions.assertNotNull(finalsDto.getStudentId());
-        Assertions.assertNotNull(finalsDto.getSubjectId());
+        Assertions.assertNotNull(finalsDto.getStudentIdDto());
+        Assertions.assertNotNull(finalsDto.getSubjectIdDto());
 
         Assertions.assertEquals(finalsEntity.getId(), finalsDto.getId());
         Assertions.assertEquals(finalsEntity.getName(), finalsDto.getNameDto());
         Assertions.assertEquals(finalsEntity.getDate(), finalsDto.getDateDto());
-        Assertions.assertEquals(student.getId(), finalsDto.getStudentId());
-        Assertions.assertEquals(subject.getId(), finalsDto.getSubjectId());
+        Assertions.assertEquals(student.getId(), finalsDto.getStudentIdDto());
+        Assertions.assertEquals(subject.getId(), finalsDto.getSubjectIdDto());
     }
 
     @Test
@@ -57,10 +60,10 @@ public class FinalsMapperTest {
 
         // Создаём entity вручную
         Student student = new Student();
-        student.setId(finalsDto.getStudentId());
+        student.setId(finalsDto.getStudentIdDto());
 
         Subject subject = new Subject();
-        subject.setId(finalsDto.getSubjectId());
+        subject.setId(finalsDto.getSubjectIdDto());
 
         Finals finalsEntity = new Finals(
                 finalsDto.getId(),
@@ -78,8 +81,8 @@ public class FinalsMapperTest {
         Assertions.assertEquals(finalsDto.getId(), finalsEntity.getId());
         Assertions.assertEquals(finalsDto.getNameDto(), finalsEntity.getName());
         Assertions.assertEquals(finalsDto.getDateDto(), finalsEntity.getDate());
-        Assertions.assertEquals(finalsDto.getStudentId(), finalsEntity.getStudent().getId());
-        Assertions.assertEquals(finalsDto.getSubjectId(), finalsEntity.getSubject().getId());
+        Assertions.assertEquals(finalsDto.getStudentIdDto(), finalsEntity.getStudent().getId());
+        Assertions.assertEquals(finalsDto.getSubjectIdDto(), finalsEntity.getSubject().getId());
     }
 
     @Test
@@ -115,14 +118,14 @@ public class FinalsMapperTest {
             Assertions.assertNotNull(dto.getId());
             Assertions.assertNotNull(dto.getNameDto());
             Assertions.assertNotNull(dto.getDateDto());
-            Assertions.assertNotNull(dto.getStudentId());
-            Assertions.assertNotNull(dto.getSubjectId());
+            Assertions.assertNotNull(dto.getStudentIdDto());
+            Assertions.assertNotNull(dto.getSubjectIdDto());
 
             Assertions.assertEquals(entity.getId(), dto.getId());
             Assertions.assertEquals(entity.getName(), dto.getNameDto());
             Assertions.assertEquals(entity.getDate(), dto.getDateDto());
-            Assertions.assertEquals(entity.getStudent().getId(), dto.getStudentId());
-            Assertions.assertEquals(entity.getSubject().getId(), dto.getSubjectId());
+            Assertions.assertEquals(entity.getStudent().getId(), dto.getStudentIdDto());
+            Assertions.assertEquals(entity.getSubject().getId(), dto.getSubjectIdDto());
         }
     }
 }

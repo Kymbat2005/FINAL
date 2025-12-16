@@ -49,11 +49,11 @@ public class FinalsServiceImpl implements FinalsService {
         finals.setDate(finalsDto.getDateDto());
 
 
-        Student student = studentRepository.findById(finalsDto.getStudentId())
+        Student student = studentRepository.findById(finalsDto.getStudentIdDto())
                 .orElseThrow(() -> new RuntimeException("Student not found"));
         finals.setStudent(student);
 
-        Subject subject = subjectRepository.findById(finalsDto.getSubjectId())
+        Subject subject = subjectRepository.findById(finalsDto.getSubjectIdDto())
                 .orElseThrow(() -> new RuntimeException("Subject not found"));
         finals.setSubject(subject);
 
