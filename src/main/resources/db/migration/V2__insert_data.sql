@@ -1,7 +1,4 @@
--- V2__insert_data.sql
--- Вставка тестовых данных для системы учета студентов и предметов
 
--- 1. Вставка предметов
 INSERT INTO t_subject (subject_id, t_name, t_teacher) VALUES
                                                           (1, 'Математика', 'Иванов Иван Иванович'),
                                                           (2, 'Физика', 'Петров Петр Петрович'),
@@ -17,7 +14,7 @@ INSERT INTO t_subject (subject_id, t_name, t_teacher) VALUES
     t_name = EXCLUDED.t_name,
                                     t_teacher = EXCLUDED.t_teacher;
 
--- 2. Вставка студентов
+
 INSERT INTO t_student (student_id, t_name, t_lastname, t_email) VALUES
                                                                     (1, 'Алексей', 'Иванов', 'alexey.ivanov@university.kz'),
                                                                     (2, 'Мария', 'Петрова', 'maria.petrova@university.kz'),
@@ -34,31 +31,31 @@ INSERT INTO t_student (student_id, t_name, t_lastname, t_email) VALUES
                                     t_lastname = EXCLUDED.t_lastname,
                                     t_email = EXCLUDED.t_email;
 
--- 3. Вставка связей студент-предмет (student_subject)
+
 INSERT INTO student_subject (student_id, subject_id) VALUES
--- Алексей Иванов
+
 (1,1),(1,2),(1,3),(1,5),
--- Мария Петрова
+
 (2,1),(2,4),(2,8),(2,5),
--- Дмитрий Сидоров
+
 (3,3),(3,1),(3,2),(3,6),
--- Екатерина Кузнецова
+
 (4,4),(4,8),(4,10),(4,5),
--- Анна Смирнова
+
 (5,7),(5,6),(5,1),(5,9),
--- Арман Нургалиев
+
 (6,10),(6,1),(6,3),(6,5),
--- Айгерим Сапарова
+
 (7,4),(7,8),(7,5),(7,9),
--- Данияр Жумабаев
+
 (8,2),(8,1),(8,3),(8,6),
--- Алина Каримова
+
 (9,7),(9,6),(9,1),(9,4),
--- Руслан Абдуллин
+
 (10,9),(10,10),(10,4),(10,5)
     ON CONFLICT (student_id, subject_id) DO NOTHING;
 
--- 4. Вставка финальных работ/экзаменов (t_finals)
+
 INSERT INTO t_finals (final_id, t_name, t_date, student_id, subject_id) VALUES
                                                                             (1, 'Итоговый экзамен по Математике', '2024-01-15', 1, 1),
                                                                             (2, 'Зачет по Физике', '2024-01-16', 1, 2),
@@ -88,21 +85,20 @@ INSERT INTO t_finals (final_id, t_name, t_date, student_id, subject_id) VALUES
                                   student_id = EXCLUDED.student_id,
                                   subject_id = EXCLUDED.subject_id;
 
--- 5. Обновление последовательностей автоинкремента
+
 SELECT setval(pg_get_serial_sequence('t_subject', 'subject_id'), COALESCE((SELECT MAX(subject_id) FROM t_subject), 1));
 SELECT setval(pg_get_serial_sequence('t_student', 'student_id'), COALESCE((SELECT MAX(student_id) FROM t_student), 1));
 SELECT setval(pg_get_serial_sequence('t_finals', 'final_id'), COALESCE((SELECT MAX(final_id) FROM t_finals), 1));
 
 
--- Вставка прав доступа
+
 INSERT INTO t_permission (id, name) VALUES
                                         (1, 'ROLE_ADMIN'),
                                         (2, 'ROLE_USER')
     ON CONFLICT (id) DO UPDATE
                             SET name = EXCLUDED.name;
 
--- Вставка пользователей
--- пароль: "password" (BCrypt)
+
 INSERT INTO t_user (id, username, email, password) VALUES
                                                        (1, 'admin', 'admin@system.kz',
                                                         '$2a$10$7QJZKx6oZ9U8pF9R4y0n2u6ZkZ9bQ5cK3P0uQ9M9pKxYpD6h0eE9y'),
@@ -113,20 +109,20 @@ INSERT INTO t_user (id, username, email, password) VALUES
                             email = EXCLUDED.email,
                             password = EXCLUDED.password;
 
--- Связь пользователей и прав
+
 INSERT INTO t_user_permissions (user_id, permissions_id) VALUES
-                                                            (1, 1), -- admin -> ROLE_ADMIN
-                                                            (1, 2), -- admin -> ROLE_USER
-                                                            (2, 2)  -- student -> ROLE_USER
+                                                            (1, 1),
+                                                            (1, 2),
+                                                            (2, 2)
     ON CONFLICT DO NOTHING;
 
--- Обновление sequence (чтобы Hibernate не словил инсульт)
+
 SELECT setval(pg_get_serial_sequence('t_permission', 'id'),
               COALESCE((SELECT MAX(id) FROM t_permission), 1));
 
 SELECT setval(pg_get_serial_sequence('t_user', 'id'),
               COALESCE((SELECT MAX(id) FROM t_user), 1));
--- 6. Проверка вставки данных
+
 DO $$
 BEGIN
     RAISE NOTICE 'Данные успешно загружены:';

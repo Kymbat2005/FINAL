@@ -18,7 +18,7 @@ public interface FinalsMapper {
 
     @Mapping(target = "name", source = "nameDto")
     @Mapping(target = "date", source = "dateDto")
-    @Mapping(target = "student", ignore = true) // будем ставить вручную в сервисе
+    @Mapping(target = "student", ignore = true)
     @Mapping(target = "subject", ignore = true)
     Finals toEntity(FinalsDto finalsDto);
 

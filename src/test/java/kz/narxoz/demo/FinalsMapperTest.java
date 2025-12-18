@@ -25,20 +25,20 @@ public class FinalsMapperTest {
 
     @Test
     void convertEntityToDtoTest() {
-        // Создаём student и subject
+
         Student student = new Student();
         student.setId(1L);
 
         Subject subject = new Subject();
         subject.setId(2L);
 
-        // Entity
+
         Finals finalsEntity = new Finals(1L, "Math Final", LocalDate.now(), student, subject);
 
-        // Маппер
+
         FinalsDto finalsDto = finalsMapper.toDto(finalsEntity);
 
-        // Проверки
+
         Assertions.assertNotNull(finalsDto);
         Assertions.assertNotNull(finalsDto.getId());
         Assertions.assertNotNull(finalsDto.getNameDto());
@@ -55,10 +55,10 @@ public class FinalsMapperTest {
 
     @Test
     void convertDtoToEntityTest() {
-        // Создаём DTO
+
         FinalsDto finalsDto = new FinalsDto(1L, "Physics Final", LocalDate.now(), 1L, 2L);
 
-        // Создаём entity вручную
+
         Student student = new Student();
         student.setId(finalsDto.getStudentIdDto());
 
@@ -73,7 +73,7 @@ public class FinalsMapperTest {
                 subject
         );
 
-        // Проверки
+
         Assertions.assertNotNull(finalsEntity);
         Assertions.assertNotNull(finalsEntity.getStudent());
         Assertions.assertNotNull(finalsEntity.getSubject());
