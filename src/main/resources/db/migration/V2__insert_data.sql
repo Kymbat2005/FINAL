@@ -93,6 +93,39 @@ SELECT setval(pg_get_serial_sequence('t_subject', 'subject_id'), COALESCE((SELEC
 SELECT setval(pg_get_serial_sequence('t_student', 'student_id'), COALESCE((SELECT MAX(student_id) FROM t_student), 1));
 SELECT setval(pg_get_serial_sequence('t_finals', 'final_id'), COALESCE((SELECT MAX(final_id) FROM t_finals), 1));
 
+
+-- Вставка прав доступа
+INSERT INTO t_permission (id, name) VALUES
+                                        (1, 'ROLE_ADMIN'),
+                                        (2, 'ROLE_USER')
+    ON CONFLICT (id) DO UPDATE
+                            SET name = EXCLUDED.name;
+
+-- Вставка пользователей
+-- пароль: "password" (BCrypt)
+INSERT INTO t_user (id, username, email, password) VALUES
+                                                       (1, 'admin', 'admin@system.kz',
+                                                        '$2a$10$7QJZKx6oZ9U8pF9R4y0n2u6ZkZ9bQ5cK3P0uQ9M9pKxYpD6h0eE9y'),
+                                                       (2, 'student', 'student@system.kz',
+                                                        '$2a$10$7QJZKx6oZ9U8pF9R4y0n2u6ZkZ9bQ5cK3P0uQ9M9pKxYpD6h0eE9y')
+    ON CONFLICT (id) DO UPDATE SET
+    username = EXCLUDED.username,
+                            email = EXCLUDED.email,
+                            password = EXCLUDED.password;
+
+-- Связь пользователей и прав
+INSERT INTO t_user_permissions (user_id, permissions_id) VALUES
+                                                            (1, 1), -- admin -> ROLE_ADMIN
+                                                            (1, 2), -- admin -> ROLE_USER
+                                                            (2, 2)  -- student -> ROLE_USER
+    ON CONFLICT DO NOTHING;
+
+-- Обновление sequence (чтобы Hibernate не словил инсульт)
+SELECT setval(pg_get_serial_sequence('t_permission', 'id'),
+              COALESCE((SELECT MAX(id) FROM t_permission), 1));
+
+SELECT setval(pg_get_serial_sequence('t_user', 'id'),
+              COALESCE((SELECT MAX(id) FROM t_user), 1));
 -- 6. Проверка вставки данных
 DO $$
 BEGIN
@@ -101,4 +134,7 @@ BEGIN
     RAISE NOTICE '- Студентов: %', (SELECT COUNT(*) FROM t_student);
     RAISE NOTICE '- Связей студент-предмет: %', (SELECT COUNT(*) FROM student_subject);
     RAISE NOTICE '- Финальных работ: %', (SELECT COUNT(*) FROM t_finals);
+    RAISE NOTICE 'Users: %', (SELECT COUNT(*) FROM t_user);
+    RAISE NOTICE 'Permissions: %', (SELECT COUNT(*) FROM t_permission);
+    RAISE NOTICE 'User-Permissions: %', (SELECT COUNT(*) FROM t_user_permissions);
 END $$;
